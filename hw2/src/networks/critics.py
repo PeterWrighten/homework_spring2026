@@ -43,10 +43,13 @@ class ValueCritic(nn.Module):
         q_values = ptu.from_numpy(q_values)
 
         # TODO: compute the loss using the observations and q_values
-        loss = None
+        q_values_pred = self.network(obs)
+        loss = F.mse_loss(q_values_pred, q_values)
 
         # TODO: perform an optimizer step
-        pass
+        self.optimizer.zero_grad()
+        loss.backward()
+        self.optimizer.step()
 
         return {
             "Baseline Loss": loss.item(),
